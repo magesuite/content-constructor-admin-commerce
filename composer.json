@@ -1,0 +1,12 @@
+{
+    "name": "creativestyle/magesuite-content-constructor-admin-commerce",
+    "description": "Compatibility layer of Content Constructor to Magento Commerce",
+    "homepage": "https://creativestyle.de",
+    "license": "OSL-3.0",
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "MageSuite\\ContentConstructorAdminCommerce\\": ""
+        }
+    }
+}
