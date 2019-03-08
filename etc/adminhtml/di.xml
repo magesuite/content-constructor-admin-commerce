@@ -1,0 +1,35 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\CmsStaging\Controller\Adminhtml\Page\Update\Save">
+        <plugin name="inject_components_into_layout_update"
+                type="MageSuite\ContentConstructorAdminCommerce\Plugin\CmsStaging\Adminhtml\Page\Update\InjectComponentsIntoLayoutUpdate" />
+    </type>
+
+    <type name="Magento\CatalogStaging\Controller\Adminhtml\Category\Update\Save">
+        <plugin name="inject_components_into_layout_update"
+                type="MageSuite\ContentConstructorAdminCommerce\Plugin\CatalogStaging\Controller\Adminhtml\Category\Update\Save\InjectComponentsIntoLayoutUpdate" />
+    </type>
+
+    <type name="Magento\CatalogStaging\Controller\Adminhtml\Product\Save">
+        <plugin name="inject_components_into_layout_update"
+                type="MageSuite\ContentConstructorAdminCommerce\Plugin\CatalogStaging\Controller\Adminhtml\Product\Save\InjectComponentsIntoLayoutUpdate" />
+    </type>
+
+    <virtualType name="MageSuite\ContentConstructorAdminCommerce\Block\Adminhtml\ContentConstructor\CategoryStaging" type="MageSuite\ContentConstructorAdmin\Block\Adminhtml\ContentConstructor\Constructor">
+        <arguments>
+            <argument name="configurationProvider" xsi:type="object">MageSuite\ContentConstructorAdminCommerce\Model\ConfigurationProvider\CategoryStaging</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="MageSuite\ContentConstructorAdminCommerce\Block\Adminhtml\ContentConstructor\ProductStaging" type="MageSuite\ContentConstructorAdmin\Block\Adminhtml\ContentConstructor\Constructor">
+        <arguments>
+            <argument name="configurationProvider" xsi:type="object">MageSuite\ContentConstructorAdminCommerce\Model\ConfigurationProvider\ProductStaging</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="MageSuite\ContentConstructorAdminCommerce\Block\Adminhtml\ContentConstructor\CmsPageStaging" type="MageSuite\ContentConstructorAdmin\Block\Adminhtml\ContentConstructor\Constructor">
+        <arguments>
+            <argument name="configurationProvider" xsi:type="object">MageSuite\ContentConstructorAdminCommerce\Model\ConfigurationProvider\CmsPageStaging</argument>
+        </arguments>
+    </virtualType>
+</config>
