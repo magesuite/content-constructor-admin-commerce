@@ -1,9 +1,8 @@
 <?php
 
-namespace MageSuite\ContentConstructorAdminCommerce\Plugin\CmsStaging\Adminhtml\Page\Update;
+namespace MageSuite\ContentConstructorAdminCommerce\Plugin\CatalogStaging\Controller\Adminhtml\Category\Update\Save;
 
-class InjectComponentsIntoLayoutUpdate
-{
+class SaveComponents {
     /**
      * @var \MageSuite\ContentConstructorAdmin\Repository\Xml\ComponentConfigurationToXmlMapper
      */
@@ -23,17 +22,15 @@ class InjectComponentsIntoLayoutUpdate
         $this->xmlToComponentConfigurationMapper = $xmlToComponentConfigurationMapper;
     }
 
-    public function beforeExecute(\Magento\CmsStaging\Controller\Adminhtml\Page\Update\Save $subject)
+    public function beforeExecute(\Magento\CatalogStaging\Controller\Adminhtml\Category\Update\Save $subject)
     {
         $data = $subject->getRequest()->getPostValue();
 
         if(isset($data['components']) and !empty($data['components'])) {
-            $components = json_decode($data['components'], true);
+            $components = $data['components'];
 
             if(!empty($components)){
-                $layoutUpdateXml = $this->configurationToXmlMapper->map($components, $data['layout_update_xml']);
-
-                $subject->getRequest()->setPostValue('layout_update_xml', $layoutUpdateXml);
+                $subject->getRequest()->setPostValue('content_constructor_content', $components);
                 $subject->getRequest()->setPostValue('content', '');
             }
         }

@@ -2,17 +2,22 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\CmsStaging\Controller\Adminhtml\Page\Update\Save">
         <plugin name="inject_components_into_layout_update"
-                type="MageSuite\ContentConstructorAdminCommerce\Plugin\CmsStaging\Adminhtml\Page\Update\InjectComponentsIntoLayoutUpdate" />
+                type="MageSuite\ContentConstructorAdminCommerce\Plugin\CmsStaging\Adminhtml\Page\Update\SaveComponents" />
     </type>
 
     <type name="Magento\CatalogStaging\Controller\Adminhtml\Category\Update\Save">
         <plugin name="inject_components_into_layout_update"
-                type="MageSuite\ContentConstructorAdminCommerce\Plugin\CatalogStaging\Controller\Adminhtml\Category\Update\Save\InjectComponentsIntoLayoutUpdate" />
+                type="MageSuite\ContentConstructorAdminCommerce\Plugin\CatalogStaging\Controller\Adminhtml\Category\Update\Save\SaveComponents" />
     </type>
 
     <type name="Magento\CatalogStaging\Controller\Adminhtml\Product\Save">
         <plugin name="inject_components_into_layout_update"
-                type="MageSuite\ContentConstructorAdminCommerce\Plugin\CatalogStaging\Controller\Adminhtml\Product\Save\InjectComponentsIntoLayoutUpdate" />
+                type="MageSuite\ContentConstructorAdminCommerce\Plugin\CatalogStaging\Controller\Adminhtml\Product\Save\SaveComponents" />
+    </type>
+
+    <type name="Magento\Banner\Model\Banner">
+        <plugin name="add_content_constructor_on_dynamic_block_save"
+                type="MageSuite\ContentConstructorAdminCommerce\Plugin\Banner\Model\Banner\AddContentConstructorOnDynamicBlockSave" />
     </type>
 
     <virtualType name="MageSuite\ContentConstructorAdminCommerce\Block\Adminhtml\ContentConstructor\CategoryStaging" type="MageSuite\ContentConstructorAdmin\Block\Adminhtml\ContentConstructor\Constructor">
@@ -30,6 +35,17 @@
     <virtualType name="MageSuite\ContentConstructorAdminCommerce\Block\Adminhtml\ContentConstructor\CmsPageStaging" type="MageSuite\ContentConstructorAdmin\Block\Adminhtml\ContentConstructor\Constructor">
         <arguments>
             <argument name="configurationProvider" xsi:type="object">MageSuite\ContentConstructorAdminCommerce\Model\ConfigurationProvider\CmsPageStaging</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\CatalogStaging\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="content_constructor_content" xsi:type="array">
+                    <item name="class" xsi:type="string">MageSuite\ContentConstructorAdminCommerce\Ui\DataProvider\Product\Form\Modifier\ContentConstructorContent</item>
+                    <item name="sortOrder" xsi:type="number">25</item>
+                </item>
+            </argument>
         </arguments>
     </virtualType>
 </config>

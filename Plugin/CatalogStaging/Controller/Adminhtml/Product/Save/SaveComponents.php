@@ -1,8 +1,8 @@
 <?php
 
-namespace MageSuite\ContentConstructorAdminCommerce\Plugin\CatalogStaging\Controller\Adminhtml\Category\Update\Save;
+namespace MageSuite\ContentConstructorAdminCommerce\Plugin\CatalogStaging\Controller\Adminhtml\Product\Save;
 
-class InjectComponentsIntoLayoutUpdate {
+class SaveComponents {
     /**
      * @var \MageSuite\ContentConstructorAdmin\Repository\Xml\ComponentConfigurationToXmlMapper
      */
@@ -22,18 +22,19 @@ class InjectComponentsIntoLayoutUpdate {
         $this->xmlToComponentConfigurationMapper = $xmlToComponentConfigurationMapper;
     }
 
-    public function beforeExecute(\Magento\CatalogStaging\Controller\Adminhtml\Category\Update\Save $subject)
+    public function beforeExecute(\Magento\CatalogStaging\Controller\Adminhtml\Product\Save $subject)
     {
         $data = $subject->getRequest()->getPostValue();
+        $product = $data['product'];
 
         if(isset($data['components']) and !empty($data['components'])) {
-            $components = json_decode($data['components'], true);
+            $components = $data['components'];
 
             if(!empty($components)){
-                $layoutUpdateXml = $this->configurationToXmlMapper->map($components, $data['custom_layout_update']);
+                $product['content_constructor_content'] = $components;
+                $product['content'] = '';
 
-                $subject->getRequest()->setPostValue('custom_layout_update', $layoutUpdateXml);
-                $subject->getRequest()->setPostValue('content', '');
+                $subject->getRequest()->setPostValue('product', $product);
             }
         }
     }

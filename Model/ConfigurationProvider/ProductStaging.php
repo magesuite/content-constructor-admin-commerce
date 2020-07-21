@@ -47,7 +47,7 @@ class ProductStaging implements \MageSuite\ContentConstructorAdmin\Block\Adminht
     public function getExistingComponentsConfiguration() {
         $filterBuilder = $this->filterBuilderFactory->create();
 
-        /** @var \Magento\CmsStaging\Model\Page\DataProvider $dataProvider */
+        /** @var \Magento\CatalogStaging\Model\Product\DataProvider $dataProvider */
         $dataProvider = $this->dataProviderFactory->create([
             'name' => 'catalogstaging_update_form_data_source',
             'primaryFieldName' => 'entity_id',
@@ -65,13 +65,17 @@ class ProductStaging implements \MageSuite\ContentConstructorAdmin\Block\Adminht
 
         $productData = $productData[$id]['product'] ?? null;
 
-        $configuration = [];
+        $configuration = null;
 
-        if ($productData !== null and isset($productData['custom_layout_update'])) {
-            $configuration = $this->xmlToComponentConfiguration->map($productData['custom_layout_update']);
+        if ($productData !== null and isset($productData['content_constructor_content']) and !empty($productData['content_constructor_content'])) {
+            $configuration = $productData['content_constructor_content'];
         }
 
-        return json_encode($configuration);
+        if(empty($configuration)) {
+            $configuration = json_encode([]);
+        }
+
+        return $configuration;
     }
 
     public function getPageType()

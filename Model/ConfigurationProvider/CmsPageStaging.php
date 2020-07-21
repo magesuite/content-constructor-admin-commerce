@@ -65,11 +65,17 @@ class CmsPageStaging implements \MageSuite\ContentConstructorAdmin\Block\Adminht
 
         $pageData = $pageData[$id] ?? null;
 
+        $configuration = null;
+
         if ($pageData !== null) {
-            $configuration = $this->xmlToComponentConfiguration->map($pageData['layout_update_xml']);
+            $configuration = $pageData['content_constructor_content'];
         }
 
-        return json_encode($configuration);
+        if(empty($configuration)) {
+            $configuration = json_encode([]);
+        }
+
+        return $configuration;
     }
 
     public function getPageType()
