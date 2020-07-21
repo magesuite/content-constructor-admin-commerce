@@ -65,13 +65,18 @@ class CategoryStaging implements \MageSuite\ContentConstructorAdmin\Block\Adminh
 
         $categoryData = $categoryData[$id] ?? null;
 
-        $configuration = [];
 
-        if ($categoryData !== null and isset($categoryData['custom_layout_update'])) {
-            $configuration = $this->xmlToComponentConfiguration->map($categoryData['custom_layout_update']);
+        $configuration = null;
+
+        if ($categoryData !== null and isset($categoryData['content_constructor_content']) and !empty($categoryData['content_constructor_content'])) {
+            $configuration = $categoryData['content_constructor_content'];
         }
 
-        return json_encode($configuration);
+        if(empty($configuration)) {
+            $configuration = json_encode([]);
+        }
+
+        return $configuration;
     }
 
     public function getPageType()
