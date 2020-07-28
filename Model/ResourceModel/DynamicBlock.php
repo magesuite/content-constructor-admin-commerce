@@ -15,14 +15,21 @@ class DynamicBlock
     /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    private $eventManager;
+    protected $eventManager;
+
+    /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $state;
 
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resourceConnection,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\App\State $state
     ) {
         $this->connection = $resourceConnection->getConnection();
         $this->eventManager = $eventManager;
+        $this->state = $state;
     }
 
     public function addContentConstructorToDynamicBlock($bannerId, $storeId, $components)
@@ -43,10 +50,12 @@ class DynamicBlock
             ->where('main_table.store_id IN (?)', [$storeId, 0])
             ->order('main_table.store_id DESC');
 
-        $this->eventManager->dispatch(
-            'magento_banner_resource_banner_content_select_init',
-            ['select' => $select, 'banner_id' => $bannerId]
-        );
+        if ($this->state->getAreaCode() != \Magento\Framework\App\Area::AREA_ADMINHTML) {
+            $this->eventManager->dispatch(
+                'magento_banner_resource_banner_content_select_init',
+                ['select' => $select, 'banner_id' => $bannerId]
+            );
+        }
 
         return $this->connection->fetchOne($select);
     }
