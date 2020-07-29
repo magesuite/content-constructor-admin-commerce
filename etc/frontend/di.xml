@@ -4,4 +4,8 @@
         <plugin name="dynamic_block_render_content_constructor_components" type="MageSuite\ContentConstructorAdminCommerce\Plugin\Banner\Model\ResourceModel\Banner\RenderContentConstructorComponents" />
     </type>
 
+    <type name="Magento\Banner\Controller\Ajax\Load">
+        <plugin name="add_product_tile_handler" type="MageSuite\ContentConstructorAdminCommerce\Plugin\Banner\Controller\Ajax\Load\AddProductTileHandler" sortOrder="10" />
+    </type>
+
 </config>
