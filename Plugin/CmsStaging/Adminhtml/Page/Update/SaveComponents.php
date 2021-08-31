@@ -4,36 +4,18 @@ namespace MageSuite\ContentConstructorAdminCommerce\Plugin\CmsStaging\Adminhtml\
 
 class SaveComponents
 {
-    /**
-     * @var \MageSuite\ContentConstructorAdmin\Repository\Xml\ComponentConfigurationToXmlMapper
-     */
-    protected $configurationToXmlMapper;
-
-    /**
-     * @var \MageSuite\ContentConstructorAdmin\Repository\Xml\XmlToComponentConfigurationMapper
-     */
-    protected $xmlToComponentConfigurationMapper;
+    protected \MageSuite\ContentConstructorAdminCommerce\Api\ContentConstructorDataProcessorInterface $requestCleaner;
 
     public function __construct(
-        \MageSuite\ContentConstructorAdmin\Repository\Xml\ComponentConfigurationToXmlMapper $configurationToXmlMapper,
-        \MageSuite\ContentConstructorAdmin\Repository\Xml\XmlToComponentConfigurationMapper $xmlToComponentConfigurationMapper
-    )
-    {
-        $this->configurationToXmlMapper = $configurationToXmlMapper;
-        $this->xmlToComponentConfigurationMapper = $xmlToComponentConfigurationMapper;
+        \MageSuite\ContentConstructorAdminCommerce\Api\ContentConstructorDataProcessorInterface $requestCleaner
+    ) {
+        $this->requestCleaner = $requestCleaner;
     }
 
     public function beforeExecute(\Magento\CmsStaging\Controller\Adminhtml\Page\Update\Save $subject)
     {
-        $data = $subject->getRequest()->getPostValue();
+        $request = $subject->getRequest();
 
-        if(isset($data['components']) and !empty($data['components'])) {
-            $components = $data['components'];
-
-            if(!empty($components)){
-                $subject->getRequest()->setPostValue('content_constructor_content', $components);
-                $subject->getRequest()->setPostValue('content', '');
-            }
-        }
+        $this->requestCleaner->cleanRedundantContent($request);
     }
 }
