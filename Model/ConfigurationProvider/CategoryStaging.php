@@ -4,15 +4,7 @@ namespace MageSuite\ContentConstructorAdminCommerce\Model\ConfigurationProvider;
 
 class CategoryStaging implements \MageSuite\ContentConstructorAdmin\Block\Adminhtml\ContentConstructor\ConfigurationProvider
 {
-    /**
-     * @var \MageSuite\ContentConstructorAdmin\Repository\Xml\XmlToComponentConfigurationMapper
-     */
-    protected $xmlToComponentConfiguration;
-
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    protected $registry;
+    public const PAGE_TYPE = 'catalogstaging_category_update_form.catalogstaging_category_update_form';
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -30,24 +22,19 @@ class CategoryStaging implements \MageSuite\ContentConstructorAdmin\Block\Adminh
     protected $dataProviderFactory;
 
     public function __construct(
-        \MageSuite\ContentConstructorAdmin\Repository\Xml\XmlToComponentConfigurationMapper $xmlToComponentConfiguration,
-        \Magento\Framework\Registry $registry,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Api\FilterBuilderFactory $filterBuilderFactory,
         \Magento\CatalogStaging\Model\Category\DataProviderFactory $dataProviderFactory
-    )
-    {
-        $this->xmlToComponentConfiguration = $xmlToComponentConfiguration;
-        $this->registry = $registry;
+    ) {
         $this->request = $request;
         $this->filterBuilderFactory = $filterBuilderFactory;
         $this->dataProviderFactory = $dataProviderFactory;
     }
 
-    public function getExistingComponentsConfiguration() {
+    public function getExistingComponentsConfiguration()
+    {
         $filterBuilder = $this->filterBuilderFactory->create();
 
-        /** @var \Magento\CmsStaging\Model\Page\DataProvider $dataProvider */
         $dataProvider = $this->dataProviderFactory->create([
             'name' => 'catalogstaging_category_update_form_data_source',
             'primaryFieldName' => 'entity_id',
@@ -60,27 +47,13 @@ class CategoryStaging implements \MageSuite\ContentConstructorAdmin\Block\Adminh
             ->create();
 
         $dataProvider->addFilter($filter);
-
         $categoryData = $dataProvider->getData();
 
-        $categoryData = $categoryData[$id] ?? null;
-
-
-        $configuration = null;
-
-        if ($categoryData !== null and isset($categoryData['content_constructor_content']) and !empty($categoryData['content_constructor_content'])) {
-            $configuration = $categoryData['content_constructor_content'];
-        }
-
-        if(empty($configuration)) {
-            $configuration = json_encode([]);
-        }
-
-        return $configuration;
+        return $categoryData[$id][\MageSuite\ContentConstructorAdminCommerce\Model\ContentConstructorDataProcessor::PARAM_CONTENT_CONSTRUCTOR_CONTENT] ?? json_encode([]);
     }
 
     public function getPageType()
     {
-        return 'catalogstaging_category_update_form.catalogstaging_category_update_form';
+        return self::PAGE_TYPE;
     }
 }

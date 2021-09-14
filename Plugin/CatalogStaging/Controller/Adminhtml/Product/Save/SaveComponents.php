@@ -2,40 +2,35 @@
 
 namespace MageSuite\ContentConstructorAdminCommerce\Plugin\CatalogStaging\Controller\Adminhtml\Product\Save;
 
-class SaveComponents {
-    /**
-     * @var \MageSuite\ContentConstructorAdmin\Repository\Xml\ComponentConfigurationToXmlMapper
-     */
-    protected $configurationToXmlMapper;
-
-    /**
-     * @var \MageSuite\ContentConstructorAdmin\Repository\Xml\XmlToComponentConfigurationMapper
-     */
-    protected $xmlToComponentConfigurationMapper;
+class SaveComponents
+{
+    protected \Magento\Framework\Serialize\SerializerInterface $serializer;
 
     public function __construct(
-        \MageSuite\ContentConstructorAdmin\Repository\Xml\ComponentConfigurationToXmlMapper $configurationToXmlMapper,
-        \MageSuite\ContentConstructorAdmin\Repository\Xml\XmlToComponentConfigurationMapper $xmlToComponentConfigurationMapper
-    )
-    {
-        $this->configurationToXmlMapper = $configurationToXmlMapper;
-        $this->xmlToComponentConfigurationMapper = $xmlToComponentConfigurationMapper;
+        \Magento\Framework\Serialize\SerializerInterface $serializer
+    ) {
+        $this->serializer = $serializer;
     }
 
     public function beforeExecute(\Magento\CatalogStaging\Controller\Adminhtml\Product\Save $subject)
     {
-        $data = $subject->getRequest()->getPostValue();
-        $product = $data['product'];
+        try {
+            $data = $subject->getRequest()->getPostValue();
+            $components = $data[\MageSuite\ContentConstructorAdminCommerce\Model\ContentConstructorDataProcessor::PARAM_COMPONENTS] ?? '';
+            $componentsArray = $this->serializer->unserialize($components);
 
-        if(isset($data['components']) and !empty($data['components'])) {
-            $components = $data['components'];
-
-            if(!empty($components)){
-                $product['content_constructor_content'] = $components;
-                $product['content'] = '';
-
-                $subject->getRequest()->setPostValue('product', $product);
+            if (empty($componentsArray)) {
+                return;
             }
+
+            $product = $data['product'];
+
+            $product[\MageSuite\ContentConstructorAdminCommerce\Model\ContentConstructorDataProcessor::PARAM_CONTENT_CONSTRUCTOR_CONTENT] = $components;
+            $product[\MageSuite\ContentConstructorAdminCommerce\Model\ContentConstructorDataProcessor::PARAM_CONTENT] = '';
+
+            $subject->getRequest()->setPostValue('product', $product);
+        } catch (\Exception $e) {
+            return;
         }
     }
 }
