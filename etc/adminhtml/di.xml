@@ -25,6 +25,11 @@
                 type="MageSuite\ContentConstructorAdminCommerce\Plugin\Banner\Model\Banner\AddContentConstructorOnDynamicBlockSave" />
     </type>
 
+    <type name="Magento\Framework\Data\Form\Element\Editor">
+        <plugin name="add_attribute_to_make_vue_ignore_wysiwyg_content"
+                type="MageSuite\ContentConstructorAdminCommerce\Plugin\Framework\Data\Form\Element\AddAttributeToMakeVueIgnoreWysiwygContent" />
+    </type>
+
     <virtualType name="MageSuite\ContentConstructorAdminCommerce\Block\Adminhtml\ContentConstructor\CategoryStaging" type="MageSuite\ContentConstructorAdmin\Block\Adminhtml\ContentConstructor\Constructor">
         <arguments>
             <argument name="configurationProvider" xsi:type="object">MageSuite\ContentConstructorAdminCommerce\Model\ConfigurationProvider\CategoryStaging</argument>
